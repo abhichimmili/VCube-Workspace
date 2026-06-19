@@ -34,7 +34,7 @@ public class GarbageCollectorDemo {
 		System.out.println(g1+"\n"+g2+"\n"+g3);
 		System.out.println("--------------------------------");
 		
-		new GarbageCollectorDemo();//Anonymus 
+		new GarbageCollectorDemo();//Anonymus Object Creation
 		System.out.println("4.Anonymus");
 		System.out.println(g1+"\n"+g2+"\n"+g3);
 		System.out.println("--------------------------------");
