@@ -4,8 +4,8 @@ public class Test {
 	
 	public static void main(String[] args) {
 		
-		Integer i=100;
-		Long b= 100L;
+//		Integer i=100;
+//		Long b= 100L;
 //		System.out.println(i==b);
 		
 		
