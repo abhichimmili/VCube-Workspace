@@ -215,3 +215,62 @@ select empno,ename from emp;
 
 # 4.Display the top 10 highest-paid employees.
 select * from emp order by sal desc limit 0,10;
+
+# 27/07/2026
+# 1.Create a view to display employee name, department number, and salary
+create view employeeView as
+select e.ename,e.deptno,d.dname,e.sal from emp e inner join deptment d on e.deptno=d.deptno;
+
+# 2.Create a composite index on (deptno, salary )
+create index dept_sal_index on emp(deptno,sal);
+
+# 3.Create a view to display employee names and salaries.
+create view empNamesSal as
+select ename,sal from emp;
+
+# 4.Create a view to display employees working in department 10.
+create view empDept10 as
+select empno,ename,hiredate,sal from emp where deptno=10;
+
+# 28/07/2026
+# 1.Find the second highest salary in each department using window functions.
+select * from (select *,dense_rank() over(order by sal desc) as rowNum from emp) as res where rowNum=2;
+
+# 2.Find the third highest salary in each department.
+select * from (select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp) as res where rowNum=3;
+
+# 3.Display employee names with their rank based on salary.
+select ename,dense_rank() over(order by sal desc) as rankNum from emp;
+
+# 29/07/2026
+# 1.Write an SQL query to display the previous employee's salary using the LAG() function.
+select *,lag(sal) over() as prevSal from emp;
+
+# 2.Write an SQL query to display the next employee's salary using the LEAD() function.
+select *,lead(sal) over() as nextSal from emp;
+
+# 3.Write an SQL query to display the lowest and highest salary in each department using the FIRST_VALUE() and LAST_VALUE() functions.
+select *,first_value(sal) over(partition by deptno order by sal desc) as highest,
+last_value(sal) over(partition by deptno order by sal desc rows between unbounded preceding and unbounded following) as lowest from emp;
+
+
+# 30/07/2026
+# 1.Display employees whose salary is greater than 2000 using a CTE.
+with employeeDetails as (
+ select * from emp where sal>2000
+) select * from employeeDetails;
+
+# 2.Find the highest paid employee in each department using a CTE.
+with employeeSalDetails as (
+select max(sal) as maxSal from emp group by deptno
+) select e.ename,e.deptno,e.sal from emp e join employeeSalDetails as es on e.sal=es.maxSal order by deptno;
+
+# 3.Display employee name,department name,and salary using a CTE and a join.
+with empDetails as(
+select e.ename,d.dname,sal from emp e inner join deptment d on e.deptno=d.deptno
+)select * from empDetails;
+
+# 4.Display the toal salary paid in each department.
+with totalSalPaid as(
+select deptno,sum(sal) as 'Total Salary' from emp group by deptno
+) select * from totalSalPaid;
