@@ -274,3 +274,68 @@ select e.ename,d.dname,sal from emp e inner join deptment d on e.deptno=d.deptno
 with totalSalPaid as(
 select deptno,sum(sal) as 'Total Salary' from emp group by deptno
 ) select * from totalSalPaid;
+
+# 31/07/2026
+# 1.Display the second highest salary in each department
+with salDetails as(
+	select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp
+)select * from salDetails where rowNum=2;
+select * from (select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp) as res where rowNum=2;
+
+# 2.Count the number of the employees in each department
+select deptno,count(*) from emp group by deptno ;
+
+# 3.Display all employees belonging to the IT department using a CTE
+with ITEmp as (
+	select deptno from deptment where dname='IT'
+) select * from emp as e join ITEmp as it on e.deptno=it.deptno;
+select * from deptment;
+
+# 4. Find the highest-paid employee in each department using window function
+with salDetails as(
+	select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp
+)select * from salDetails where rowNum=1;
+select * from (select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp) as res where rowNum=1;
+
+#3/8/2026
+# 1.
+select * from (select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp) as res where rowNum<=3;
+
+# 2.
+#CREATE PROCEDURE `update_deptno`(in eNo int,in dNo int)
+#BEGIN
+#   update emp set deptno=dNo where empno=eNo;
+#END
+call update_deptno(7521,20);
+
+# 5/08/2026
+# 1.1. Create a stored procedure that accepts a department number as input. The procedure should retrieve all employees working in the specified department and categorize them based on their salary using the following criteria:
+##Excellent – Salary greater than or equal to 5000
+##Good – Salary between 3000 and 4999
+##Needs Improvement – Salary less than 3000
+
+#CREATE DEFINER=`root`@`localhost` PROCEDURE `sal_category`(in salary int,out category varchar(20))
+#BEGIN
+#	if salary>= 5000 then
+#		set category='Excellent';
+#	elseif salary>=3000 then
+#		set category='Good';
+#	else 
+#		set category='Needs Improvement';
+#     end if;
+#END
+call sal_category(5000,@category);
+select @category as Categry;
+
+# 2. Create a stored procedure that accepts the following input parameters: Department Number and Salary Increment Percentage
+
+#CREATE DEFINER=`root`@`localhost` PROCEDURE `sal_increment`(in dNo int,in percentage int)
+#BEGIN
+#	update emp set sal=sal+(sal*(percentage/100)) where deptno=dNo;
+#    select * from emp where deptno=dNo;
+#END
+set autocommit =0;
+rollback;
+select * from emp;
+call sal_increment(10,15);
+
