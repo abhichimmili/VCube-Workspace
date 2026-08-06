@@ -324,8 +324,8 @@ call update_deptno(7521,20);
 #		set category='Needs Improvement';
 #     end if;
 #END
-call sal_category(5000,@category);
-select @category as Categry;
+call sal_category(2000,@category);
+select @category  as Categry;
 
 # 2. Create a stored procedure that accepts the following input parameters: Department Number and Salary Increment Percentage
 
@@ -339,3 +339,17 @@ rollback;
 select * from emp;
 call sal_increment(10,15);
 
+select new_function();
+select emp_earnings(7844);
+
+select getSalaryGrade(7844);
+
+select e.empno,e.ename as Employee ,e.sal as 'Emp Sal',m.ename as 'Manager',m.sal as'Manager Sal' 
+from emp e join emp m on e.mgr=m.empno where e.sal>m.sal;
+
+select e.empno,e.ename as Employee ,e.sal as 'Emp Sal',esalgrad.grade as 'Emp Sal Grade',
+m.ename as 'Manager',m.sal as 'Manager Sal' ,msalgrad.grade as 'Manager Sal Grade'
+from emp e join salgrade as esalgrad on e.sal between losal and hisal 
+join 
+emp m join salgrade as msalgrad on m.sal between losal and hisal 
+on e.mgr=m.empno where esalgrad.grade>msalgrad.grade;
