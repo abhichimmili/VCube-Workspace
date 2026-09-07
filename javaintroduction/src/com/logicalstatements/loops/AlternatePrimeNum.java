@@ -2,7 +2,7 @@ package com.logicalstatements.loops;
 
 public class AlternatePrimeNum {
 	
-	static boolean isPrime(int n) {
+	public static boolean isPrime(int n) {
 		if(n==0||n==1) {
 			return false;
 		}

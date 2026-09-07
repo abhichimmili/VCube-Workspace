@@ -353,3 +353,108 @@ from emp e join salgrade as esalgrad on e.sal between losal and hisal
 join 
 emp m join salgrade as msalgrad on m.sal between losal and hisal 
 on e.mgr=m.empno where esalgrad.grade>msalgrad.grade;
+
+#27/08/2026
+#1.
+create table customers(
+	customer_id int auto_increment primary key,
+    name varchar(120) not null,
+    email varchar(100) unique not null,
+    created_at timestamp default current_timestamp
+);
+
+create table products(
+	product_id int auto_increment primary key,
+    name varchar(120) not null,
+    price decimal(10,2) not null check(price>=0),
+    stock_quantity int not null check(stock_quantity>=0) default 1
+);
+create table orders(
+	order_id int auto_increment primary key,
+    customer_id int not null,
+    order_status varchar(25) default 'Pending' check(order_status in('Pending','Completed','Cancelled')),
+    created_at timestamp default current_timestamp,
+    foreign key (customer_id) references customers(customer_id)
+);
+
+create table order_items(
+	item_id int auto_increment primary key,
+    product_id int not null,
+    order_id int not null,
+    quantity int not null check(quantity>0),
+    unit_price decimal(10,2),
+    total_price decimal(10,2),
+    foreign key (order_id) references orders(order_id),
+    foreign key (product_id) references products(product_id)
+);
+
+create table order_audit(
+	audit_id int auto_increment primary key,
+    order_id int not null,
+    old_status varchar(20),
+    new_status varchar(20),
+    changed_at timestamp default current_timestamp
+);
+
+#
+DELIMITER //
+create trigger trg_order_items_before_insert
+before insert on order_items
+for each row
+begin 
+	declare v_stock int;
+    declare v_price decimal(10,2);
+    
+    select stock_quantity ,price into v_stock,v_price
+    from products
+    where product_id = new.product_id;
+    
+    if v_stock<new.quantity then
+		signal sqlstate '45000'
+        set message_text ="Insufficient stock for this product.";
+	end if;
+    
+    set new.unit_price = v_price;
+    set new.total_price =v_price* new.quantity;
+    
+END //
+DELIMITER ;
+
+#28/08/2026
+#1.
+with top_2_high_paid as(
+	select *,row_number() over (partition by deptno order by sal desc) as rowNo from emp
+)select * from top_2_high_paid where rowNo<=2;
+
+
+#31/08/2026
+#1.
+with total_sal as (
+	select deptno,sum(sal) as salary from emp group by deptno
+) select * from total_sal where salary>5000;
+
+#2.
+with second_lowest_sal as(
+	select *,dense_rank() over(partition by deptno order by sal desc) as rowNo from emp
+) select * from second_lowest_sal where rowNo=2;
+
+
+#01/09/2026
+select empno,ename,deptno,sal,dense_rank() over (order by sal desc) as ranking from emp;
+
+#02/09/2026
+with gtr_than_avg_sal as(
+	select * from emp as e1 where sal > (select avg(sal) from emp as e2 where e2.deptno=e1.deptno group by deptno)
+)
+, less_than_max_sal as(
+	select * from gtr_than_avg_sal as ga where sal > (select max(sal) from emp as e2 where e2.deptno=ga.deptno group by deptno)
+), mgr_earns_less_sal as(
+	select * from less_than_max_sal as lm where sal > (select sal from emp as e2 where lm.mgr=e2.empno)
+)select * from mgr_earns_less_sal;
+
+#03/09/2026
+call emp_dept_name(7369,@dept);
+select @dept;
+
+call even_or_odd(0,@res);
+select @res;
