@@ -56,7 +56,6 @@ public class Tic_Tac_Toe {
 	}
 
 	private static boolean isWin() {
-		// TODO Auto-generated method stub
 		for (int i = 0; i < ROW; i++) {
 			int r = 0;// rows
 			for (int j = 0; j < COL; j++) {

@@ -1,6 +1,16 @@
 package com.oops;
 
-public class Car extends Vehicle {
+class Vehicle {
+	 int speed=50;
+	 void display() {
+		 System.out.println("Vehicle method is displayed.Speed is "+speed);
+	 }
+	 void start() {
+		 System.out.println("Vehivle class start method");
+	 }
+}
+
+class Car extends Vehicle {
 	int speed=100;
 	void display() {
 		System.out.println("Car method is displayed.Speed is "+speed);
@@ -12,6 +22,8 @@ public class Car extends Vehicle {
 	void start() {
 		System.out.println("Car class start method");
 	}
+}
+public class VehicleDriverDemo {
 
 	public static void main(String[] args) {
 		Vehicle v = new Car();
@@ -31,7 +43,6 @@ public class Car extends Vehicle {
 		v1.display();
 		//v1.drive(); CE
 		v1.start();
-		
 	}
 
 }
