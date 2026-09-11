@@ -12,6 +12,9 @@ public class SecondLargest {
 				secondMax=max;
 				max=a;
 			}
+			if(a< secondMax  && a>max) {
+				secondMax=a;
+			}
 		}
 		
 		return secondMax;
@@ -19,7 +22,7 @@ public class SecondLargest {
 	public static void main(String[] args) {
 		int[] arr= {12,45,67,23,89,54};
 		int res=find(arr);
-		System.out.println("Seconf highest element is : "+res);
+		System.out.println("Second highest element is : "+res);
 	}
 
 }
