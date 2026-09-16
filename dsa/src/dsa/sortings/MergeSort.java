@@ -13,8 +13,8 @@ public class MergeSort {
 		for(int j=0;j<left.length;j++) {
 			left[j]=arr[i++];
 		}
-		for(int j=0;j<right.length;j++) {
-			right[j]=arr[i++];
+		for(int k=0;k<right.length;k++) {
+			right[k]=arr[i++];
 		}
 		divide(left);
 		System.out.println("Left :"+Arrays.toString(left));

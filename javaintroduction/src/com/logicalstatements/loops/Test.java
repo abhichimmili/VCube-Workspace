@@ -10,6 +10,14 @@ public class Test {
 		}
 	}
 	public static void main(String[] args) {
+		int[] arr= {2,4,6,8};
+		int j=0;
+		arr[j]++;
+		++arr[j++];
+		arr[j]+=arr[j-1]++;
+		System.out.println(arr[0]+" "+arr[1]+" "+arr[2]+" "+arr[3]);
+		
+		
 		int[] a= {1,2,3,4};
 		c(a);
 		System.out.println(Arrays.toString(a));

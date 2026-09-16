@@ -1,3 +1,4 @@
+use batch74;
 #09/09/2026
 # 1.Display the highest-paid employee from each department.
 select * from (select *,dense_rank() over(partition by deptno order by sal) as payRank from emp ) as e where e.payRank=1;
@@ -8,6 +9,23 @@ select ename from emp where ename REGEXP "^[A-Z]";
 
 #10/09/2026
 # 1.Display employees in the custom order of job roles.
-select * from emp order by field(job,'CLERK','MANAGER','SALESMAN');
+select * from emp order by field(job,'CLERK','MANAGER','SALESMAN',job);
 
 # 2.Retrieve employees whose salary exceeds the company average salary.
+select * from emp where sal>(select avg(sal) from emp);
+
+#11/09/2026
+# 1. List employees earning more than their managers.
+select * from emp e1 where e1.sal >(select e2.sal from emp e2 where e1.mgr=e2.empno );
+select * from emp e1 join emp e2 on e1.mgr=e2.empno where e1.sal>e2.sal;
+
+# 2. Display Employees Whose Salary Rank is Between 3 and 5
+select * from (select *,dense_rank() over(order by sal) as salary from emp ) as ranking where ranking.salary between 3 and 5;
+with salary_rank as(
+	select * from (select *,dense_rank() over(order by sal) as salary from emp ) as ranking where ranking.salary between 3 and 5
+)select * from salary_rank where salary between 3 and 5;
+
+#15/09/2026
+# 1. Show employees whose commsision exceeds their salary
+select * from emp where  comm>sal;
+

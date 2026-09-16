@@ -471,3 +471,7 @@ select e.deptno from deptment d left join emp e on d.deptno=e.deptno group by e.
 select 1 where null;
 select 1+'2'+'3';
 select * from emp where sal=null or sal <> null;
+
+#06/09/2026
+
+call emp_sal(7900);
