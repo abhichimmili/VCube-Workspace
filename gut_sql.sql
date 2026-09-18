@@ -29,3 +29,17 @@ with salary_rank as(
 # 1. Show employees whose commsision exceeds their salary
 select * from emp where  comm>sal;
 
+#16/09/2026
+# 1. Display the employee who receives the Nth highest salary?
+# without using limit
+select * from (select *,dense_rank() over(order by sal) as rnk from emp ) as temp where rnk=N;
+with rnk_table as (
+	select *,dense_rank() over(order by sal) as rnk from emp 
+)select * from rnk_table where rnk=4;
+
+# using limit;
+select * from (select *,dense_rank() over(order by sal) as rnk from emp ) as temp limit 1,1;
+
+#17/09/2026
+# 1. Calculate the difference between the highest and lowest salaries.
+select max(sal)-min(sal) as diff from emp;
