@@ -274,3 +274,204 @@ select e.ename,d.dname,sal from emp e inner join deptment d on e.deptno=d.deptno
 with totalSalPaid as(
 select deptno,sum(sal) as 'Total Salary' from emp group by deptno
 ) select * from totalSalPaid;
+
+# 31/07/2026
+# 1.Display the second highest salary in each department
+with salDetails as(
+	select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp
+)select * from salDetails where rowNum=2;
+select * from (select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp) as res where rowNum=2;
+
+# 2.Count the number of the employees in each department
+select deptno,count(*) from emp group by deptno ;
+
+# 3.Display all employees belonging to the IT department using a CTE
+with ITEmp as (
+	select deptno from deptment where dname='IT'
+) select * from emp as e join ITEmp as it on e.deptno=it.deptno;
+select * from deptment;
+
+# 4. Find the highest-paid employee in each department using window function
+with salDetails as(
+	select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp
+)select * from salDetails where rowNum=1;
+select * from (select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp) as res where rowNum=1;
+
+#3/8/2026
+# 1.
+select * from (select *,dense_rank() over(partition by deptno order by sal desc) as rowNum from emp) as res where rowNum<=3;
+
+# 2.
+#CREATE PROCEDURE `update_deptno`(in eNo int,in dNo int)
+#BEGIN
+#   update emp set deptno=dNo where empno=eNo;
+#END
+call update_deptno(7521,20);
+
+# 5/08/2026
+# 1.1. Create a stored procedure that accepts a department number as input. The procedure should retrieve all employees working in the specified department and categorize them based on their salary using the following criteria:
+##Excellent – Salary greater than or equal to 5000
+##Good – Salary between 3000 and 4999
+##Needs Improvement – Salary less than 3000
+
+#CREATE DEFINER=`root`@`localhost` PROCEDURE `sal_category`(in salary int,out category varchar(20))
+#BEGIN
+#	if salary>= 5000 then
+#		set category='Excellent';
+#	elseif salary>=3000 then
+#		set category='Good';
+#	else 
+#		set category='Needs Improvement';
+#     end if;
+#END
+call sal_category(2000,@category);
+select @category  as Categry;
+
+# 2. Create a stored procedure that accepts the following input parameters: Department Number and Salary Increment Percentage
+
+#CREATE DEFINER=`root`@`localhost` PROCEDURE `sal_increment`(in dNo int,in percentage int)
+#BEGIN
+#	update emp set sal=sal+(sal*(percentage/100)) where deptno=dNo;
+#    select * from emp where deptno=dNo;
+#END
+set autocommit =0;
+rollback;
+select * from emp;
+call sal_increment(10,15);
+
+select new_function();
+select emp_earnings(7844);
+
+select getSalaryGrade(7844);
+
+select e.empno,e.ename as Employee ,e.sal as 'Emp Sal',m.ename as 'Manager',m.sal as'Manager Sal' 
+from emp e join emp m on e.mgr=m.empno where e.sal>m.sal;
+
+select e.empno,e.ename as Employee ,e.sal as 'Emp Sal',esalgrad.grade as 'Emp Sal Grade',
+m.ename as 'Manager',m.sal as 'Manager Sal' ,msalgrad.grade as 'Manager Sal Grade'
+from emp e join salgrade as esalgrad on e.sal between losal and hisal 
+join 
+emp m join salgrade as msalgrad on m.sal between losal and hisal 
+on e.mgr=m.empno where esalgrad.grade>msalgrad.grade;
+
+#27/08/2026
+#1.
+create table customers(
+	customer_id int auto_increment primary key,
+    name varchar(120) not null,
+    email varchar(100) unique not null,
+    created_at timestamp default current_timestamp
+);
+
+create table products(
+	product_id int auto_increment primary key,
+    name varchar(120) not null,
+    price decimal(10,2) not null check(price>=0),
+    stock_quantity int not null check(stock_quantity>=0) default 1
+);
+create table orders(
+	order_id int auto_increment primary key,
+    customer_id int not null,
+    order_status varchar(25) default 'Pending' check(order_status in('Pending','Completed','Cancelled')),
+    created_at timestamp default current_timestamp,
+    foreign key (customer_id) references customers(customer_id)
+);
+
+create table order_items(
+	item_id int auto_increment primary key,
+    product_id int not null,
+    order_id int not null,
+    quantity int not null check(quantity>0),
+    unit_price decimal(10,2),
+    total_price decimal(10,2),
+    foreign key (order_id) references orders(order_id),
+    foreign key (product_id) references products(product_id)
+);
+
+create table order_audit(
+	audit_id int auto_increment primary key,
+    order_id int not null,
+    old_status varchar(20),
+    new_status varchar(20),
+    changed_at timestamp default current_timestamp
+);
+
+#
+DELIMITER //
+create trigger trg_order_items_before_insert
+before insert on order_items
+for each row
+begin 
+	declare v_stock int;
+    declare v_price decimal(10,2);
+    
+    select stock_quantity ,price into v_stock,v_price
+    from products
+    where product_id = new.product_id;
+    
+    if v_stock<new.quantity then
+		signal sqlstate '45000'
+        set message_text ="Insufficient stock for this product.";
+	end if;
+    
+    set new.unit_price = v_price;
+    set new.total_price =v_price* new.quantity;
+    
+END //
+DELIMITER ;
+
+#28/08/2026
+#1.
+with top_2_high_paid as(
+	select *,row_number() over (partition by deptno order by sal desc) as rowNo from emp
+)select * from top_2_high_paid where rowNo<=2;
+
+
+#31/08/2026
+#1.
+with total_sal as (
+	select deptno,sum(sal) as salary from emp group by deptno
+) select * from total_sal where salary>5000;
+
+#2.
+with second_lowest_sal as(
+	select *,dense_rank() over(partition by deptno order by sal desc) as rowNo from emp
+) select * from second_lowest_sal where rowNo=2;
+
+
+#01/09/2026
+select empno,ename,deptno,sal,dense_rank() over (order by sal desc) as ranking from emp;
+
+#02/09/2026
+with gtr_than_avg_sal as(
+	select * from emp as e1 where sal > (select avg(sal) from emp as e2 where e2.deptno=e1.deptno group by deptno)
+)
+, less_than_max_sal as(
+	select * from gtr_than_avg_sal as ga where sal > (select max(sal) from emp as e2 where e2.deptno=ga.deptno group by deptno)
+), mgr_earns_less_sal as(
+	select * from less_than_max_sal as lm where sal > (select sal from emp as e2 where lm.mgr=e2.empno)
+)select * from mgr_earns_less_sal;
+
+#03/09/2026
+call emp_dept_name(7369,@dept);
+select @dept;
+
+call even_or_odd(0,@res);
+select @res;
+
+
+
+select * from emp e where e.sal>(select avg(sal) from emp e1 
+where e.deptno=e1.deptno group by deptno) and e.sal<(select avg(sal) from emp);
+
+select * from emp e where hiredate=(select max(hiredate) from emp where deptno=e.deptno);
+
+select e.deptno from deptment d left join emp e on d.deptno=e.deptno group by e.deptno,hiredate order by hiredate limit 1;
+
+select 1 where null;
+select 1+'2'+'3';
+select * from emp where sal=null or sal <> null;
+
+#06/09/2026
+
+call emp_sal(7900);

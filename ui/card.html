@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+        <style >
+            .card{
+                width:400px;
+                height:600px;
+                margin: 30 auto;
+                position: relative;
+                background-color: #f1f1f1;
+            }
+            .innerCard{
+                width:370px;
+                height:570px;
+                position:absolute;
+                top:15px;
+                left:15px;
+                background-color: #FAFAD2;
+                border-radius:15px;
+                border: 1px solid #B0B0B0;
+            }
+            .badge{
+                width:fit-content;
+                padding:4px;
+                color:#fff;
+                background-color:#0077ff;
+                border-radius:5px;
+                position:absolute;
+                top:20px;
+                right:20px;
+            }
+            .image{
+                width:100px;
+                height:100px;
+                background-color:#B0B0B0;
+                border-radius:50%;
+                position:absolute;
+                top:90px;
+                right:140px;
+            }
+            .details{
+                position:absolute;
+                top:180px;
+                padding-left:30px;
+                padding-right: 30px;
+                text-align: center;
+            }
+            .name{
+                color:#020275;
+            }
+            .btn{
+                background-color: green;
+                color:white;
+                padding:10px;
+                border-radius: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <div class="innerCard">
+                <div class="badge"><b>Student</b></div>
+                <img class="image" src="" alt="john doe">
+                <div class="details">
+                    <h1 class="name">John Doe</h1>
+                    <h2>University of Technology</h2>
+                    <p>Computer Science</p>
+                    <p>johndoe@email.com</p>
+                    <p><b>Skills:</b>HTML,CSS,JavaScript,Figma</p>
+                    <p>Passionate about web development and UI/UX design</p>
+                    <button class="btn">View Profile</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
