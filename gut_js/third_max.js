@@ -8,5 +8,5 @@ function findThirdMax(num1,num2,num3) {
     }
 }
 
-console.log(findThirdMax(3, 2, 1)); // Output: 2
-console.log(findThirdMax(15, 22, 3)); // Output: 15
+console.log("Max Element:"+findThirdMax(3, 2, 1)); // Output: 2
+console.log("Max Element:"+findThirdMax(15, 22, 3)); // Output: 15

@@ -1,6 +1,32 @@
 <html>
     <head>
         <script>
+            function checkNumber(num){
+                if(num<0){
+                    console.log("Negative number");
+                }
+                else if(num>0){
+                    console.log("Positive number");
+                }
+                else{
+                    console.log("Zero");
+                }
+            }
+            console.log("Check Number: "+checkNumber(-5));
+            
+            function checkEvenOdd(num){
+                if(num%2==0){
+                    console.log("Even number");
+                }else{
+                    console.log("Odd number");
+                }
+            }
+            
+            let numbers = [7,12,0,15,22,9];
+            for(let i=0;i<numbers.length;i++){
+                console.log("Check Even/Odd: "+numbers[i]+" - "+checkEvenOdd(numbers[i]));
+            }
+
             function findThirdMax(num1,num2,num3) {
                 if(num1 >=num2 && num1 >=num3){
                     return num1;
@@ -10,8 +36,69 @@
                     return num3;
                 }
             }
-            console.log(findThirdMax(3, 2, 1));
-            console.log(findThirdMax(15, 22, 3));
+            console.log("Max Element: "+findThirdMax(3, 2, 1));
+            console.log("Max Element: "+findThirdMax(15, 22, 3));
+
+            function findLeapYear(year){
+                if((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            console.log("Is Leap Year: "+findLeapYear(2020));
+            console.log("Is Leap Year: "+findLeapYear(2021));
+
+            function multiplicationTable(num){
+                for(let i=1;i<=10;i++){
+                    console.log(num+" x "+i+" = "+(num*i));
+                }
+            }
+            let number = 5;
+            console.log("Multiplication Table: "+number);
+            multiplicationTable(number);
+
+            function findFactorial(num){
+                let factorial=1;
+                for(let i=1;i<=num;i++){
+                    factorial*=i;
+                }
+                return factorial;
+            }
+            let numberForFactorial = 5;
+            console.log("Factorial of "+numberForFactorial+": "+findFactorial(numberForFactorial));
+
+            function findFibonacci(n){
+                let fib = [0, 1];
+                for(let i=2;i<n;i++){
+                    fib[i] = fib[i-1] + fib[i-2];
+                }
+                return fib;
+            }
+            let numberForFibonacci = 10;
+            console.log("Fibonacci sequence up to "+numberForFibonacci+": "+findFibonacci(numberForFibonacci));
+
+            function findPrime(num){
+                if(num <= 1) return false;
+                for(let i=2;i<=Math.sqrt(num);i++){
+                    if(num % i == 0) return false;
+                }
+                return true;
+            }
+            let numberForPrime = 17;
+            console.log("Is Prime: "+findPrime(numberForPrime));
+
+            function reverseNum(num){
+                let reversed=0;
+                while(num>0){
+                    reversed=reversed*10+num%10;
+                    num=Math.floor(num/10);
+                }
+                return reversed;
+            }
+            let numberForReverse = 12345;
+            console.log("Reversed Number: "+reverseNum(numberForReverse));
+
         </script>
     </head>
     <body>

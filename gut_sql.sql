@@ -51,3 +51,8 @@ select * from emp e where sal=(select max(sal) as high from emp where e.deptno=d
 #21/09/2026-Day8
 # 1.List departments whose average salary exceeds the company average salary.
 select deptno from emp group by deptno having avg(sal)>(select avg(sal) from emp);
+
+
+#22/09/2026-Day9
+# 1.Show departments where total salary expenditure is greater than 10000.
+select deptno,sum(sal) from emp group by deptno having sum(sal)>10000;
