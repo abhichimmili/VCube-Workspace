@@ -99,6 +99,24 @@
             let numberForReverse = 12345;
             console.log("Reversed Number: "+reverseNum(numberForReverse));
 
+            function sumOfDigits(num){
+                let sum=0;
+                while(num>0){
+                    sum+=num%10;
+                    num=Math.floor(num/10);
+                }
+                return sum;
+            }
+            let numberForSum = 12345;
+            console.log("Sum of Digits: "+sumOfDigits(numberForSum));
+
+            function checkPalindrome(num){
+                let reversed=reverseNum(num);
+                return num === reversed;
+            }
+            let numberForPalindrome = 12321;
+            console.log("Is Palindrome: "+checkPalindrome(numberForPalindrome));
+
         </script>
     </head>
     <body>

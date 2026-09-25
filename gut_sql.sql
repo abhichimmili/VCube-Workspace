@@ -56,3 +56,11 @@ select deptno from emp group by deptno having avg(sal)>(select avg(sal) from emp
 #22/09/2026-Day9
 # 1.Show departments where total salary expenditure is greater than 10000.
 select deptno,sum(sal) from emp group by deptno having sum(sal)>10000;
+
+#23/09/2026
+# 1. Show the department with the highest payroll.
+select deptno,max(sal) from emp group by deptno;
+
+#24/09/2026
+# 1.Create procedure to transfer employees between departments with rollback handling
+
