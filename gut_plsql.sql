@@ -101,3 +101,66 @@ BEGIN
 END $
 delimiter ;
 call emp_mgr_sal();
+
+#22/09/2026-Day9
+# 1.Create function to return optimized bonus percentage.
+#Logic:
+#Salary < 2000 → 20%
+#Salary 2000–5000 → 10%
+#Salary > 5000 → 5%
+
+delimiter $
+CREATE FUNCTION `bonus_percentage`(salary int) RETURNS int
+    DETERMINISTIC
+BEGIN
+	declare bonus double default 0.0;
+    case 
+		when salary <2000 then
+			set bonus=20;
+		when salary between 2000 and 5000 then
+			set bonus=10;
+		when salary>5000 then
+			set bonus=5;
+		end case;
+RETURN bonus;
+END
+$
+delimiter ;
+
+ select bonus_percentage(6000);
+ 
+#23/09/206 
+# Create trigger preventing salary decrease greater than 20%
+delimiter $
+create trigger emp_sal_cant_decrease_more_than_20
+before update on emp
+for each row
+begin 
+	if old.sal > new.sal*0.8 then
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Salary cannot be decreased by more than 20%';
+    end if; 
+end $
+delimiter ;
+
+#24/09/2026
+# 1.Create trigger to maintain salary history automatically
+create table salary_history(
+	history_id int auto_increment primary key,
+    empno int,
+    old_salary decimal(10,2),
+    new_salary decimal(10,2),
+    changed_date datetime
+);
+
+delimiter $
+create trigger emp_salary_history
+after update on emp 
+for each row
+begin
+	if old.sal<> new.sal then
+		insert into salary_history(empno,old_salary,new_salary,changed_date)
+		values (old.empno,old.sal,new.sal,now());
+	end if;
+end $
+delimiter ;

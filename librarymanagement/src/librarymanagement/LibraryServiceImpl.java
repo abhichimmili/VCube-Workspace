@@ -35,6 +35,10 @@ public class LibraryServiceImpl implements LibraryOperations  {
 
 	@Override
 	public void getAllBooks() {
+		if(count==0) {
+			System.out.println("No books Available.");
+			return;
+		}
 		System.out.println("These are the books Available in our Library ");
 		for (int i = 0; i < count; i++) {
 			System.out.println(books[i]);

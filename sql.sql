@@ -472,6 +472,44 @@ select 1 where null;
 select 1+'2'+'3';
 select * from emp where sal=null or sal <> null;
 
-#06/09/2026
+select mgr,count(*) as noOfEmp from emp group by mgr;
 
-call emp_sal(7900);
+#07/09/2026
+#1. Write a Stored procedure that accept empno as input 
+ #> fetch the Sal of emp with that empno  
+ #> if the salary is 0-2000 show the message as Low salary 
+ #> if the salary is 2001-9999
+ # Show the message as Good salary
+ call emp_sal(7900);
+
+#11/09/2026
+# 1.Write a stored procedure that can calculate the sum of N natural numbers.
+call sumOfNaturalNumbers(5);
+
+#15/09/2026
+#Write a Trigger that able to stop the insertion of employees into any department 
+#if the count of users are 10 and display the message as "employee limit reached in department" 
+#use SIGNAL SQLSTATE for message
+DELIMITER $
+create trigger trg_emp_dept_limit
+before insert on emp
+for each row
+begin 
+	declare countD int default 0;
+    select count(*) into countD from emp where deptno=new.deptno;
+    if countD>=10 then
+		signal sqlstate '45000'
+        set MESSAGE_TEXT="employee limit reached in department";
+	end if;
+end
+$
+delimiter ;
+
+#16/09/2026
+#1.Write a PL/SQL program to check whether a number is an Armstrong number.
+#Example:153
+#1³ + 5³ + 3³ = 153
+
+call IfArmStrong(153,@result);
+select @result;
+
