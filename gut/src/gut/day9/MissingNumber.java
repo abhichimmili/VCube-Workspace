@@ -20,6 +20,12 @@ public class MissingNumber {
 				break;
 			}
 		}
+		int expectedSum=num*(num+1)/2;
+		int actualSum=0;
+		for (int i = 0; i <arr.length ; i++) {
+			actualSum+=arr[i];
+		}
+		System.out.println(expectedSum-actualSum);
 	}
 
 }

@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 
 public class SmallerDistinctSubString {
-
+	//
     public static void main(String[] args) {
 
         String str = "aabcbcdbca";

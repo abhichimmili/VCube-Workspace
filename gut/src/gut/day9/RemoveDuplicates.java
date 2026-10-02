@@ -30,7 +30,7 @@ public class RemoveDuplicates {
 	}
 	
 	static void removeDuplicate(int[] arr) {
-		int[] temp = new int[arr.length];
+//		int[] temp = new int[arr.length];
 		int p1 = Integer.MIN_VALUE;
 		int j = 0;
 		int count=0;
