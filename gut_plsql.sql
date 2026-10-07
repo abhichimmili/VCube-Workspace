@@ -129,7 +129,7 @@ delimiter ;
 
  select bonus_percentage(6000);
  
-#23/09/206 
+#23/09/206 - Day10
 # Create trigger preventing salary decrease greater than 20%
 delimiter $
 create trigger emp_sal_cant_decrease_more_than_20
@@ -143,7 +143,7 @@ begin
 end $
 delimiter ;
 
-#24/09/2026
+#24/09/2026 - Day11
 # 1.Create trigger to maintain salary history automatically
 create table salary_history(
 	history_id int auto_increment primary key,
@@ -164,3 +164,40 @@ begin
 	end if;
 end $
 delimiter ;
+
+#25-28/09/2026 - Day12-Day13
+#Create procedure to generate department-wise payroll reports
+delimiter $
+CREATE PROCEDURE `department_payroll_report`()
+BEGIN
+    SELECT d.deptno,d.dname,d.loc,
+        COUNT(e.empno) AS employee_count,
+        COALESCE(SUM(e.sal), 0) AS total_salary,
+        COALESCE(AVG(e.sal), 0) AS average_salary,
+        COALESCE(MIN(e.sal), 0) AS minimum_salary,
+        COALESCE(MAX(e.sal), 0) AS maximum_salary,
+        COALESCE(SUM(e.comm), 0) AS total_commission,
+        COALESCE(SUM(e.sal + COALESCE(e.comm, 0)), 0) AS total_payroll
+    FROM deptment d
+    LEFT JOIN emp e ON d.deptno = e.deptno
+    GROUP BY
+        d.deptno, d.dname, d.loc
+    ORDER BY d.deptno;
+END $
+delimiter ;
+call department_payroll_report();
+
+#07/10/2026 - Day19
+# 1.Create function to return nth highest salary without analytic functions
+delimiter $
+CREATE FUNCTION `get_nth_highest_salary`(p_n int) RETURNS int
+    DETERMINISTIC
+BEGIN
+	declare v_sal int default 0;
+    select max(e1.sal) into v_sal from emp e1 where p_n-1=
+		(select count(distinct e2.sal) from emp e2 where e2.sal>e1.sal);
+RETURN v_sal;
+END $
+delimiter ;
+select get_nth_highest_salary(3);
+
